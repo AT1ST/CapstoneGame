@@ -22,6 +22,20 @@ class SPG_PlayerController extends PlayerController;
  * @output	out_Location, view location of player
  * @output	out_rotation, view rotation of player
  */
+
+//*****************************************************************
+// CODE FOR DOUBLE CLICK DELAY REMOVAL!!!!
+simulated function BurstWeaponModify()
+{
+	local vector2D MPos;
+
+	if (LocalPlayer(Player) != None)
+	{
+		MPos = LocalPlayer(Player).ViewportClient.GetMousePosition();
+		LocalPlayer(Player).ViewportClient.SetMouse(MPos.X, MPos.Y+2);
+	}
+}
+//*************************************************************
 simulated event GetPlayerViewPoint( out vector out_Location, out Rotator out_Rotation )
 {
 	local Actor TheViewTarget;
@@ -56,24 +70,33 @@ simulated event GetPlayerViewPoint( out vector out_Location, out Rotator out_Rot
 		out_Location.Z += 50;
 		out_Location.X += 0;
 		out_Location.Y += 0;
-		weaponPlace.Z= out_Location.Z - 15;
+
+
+		//Now we turn the player around.
+		//Should be facing "backwards", which is forwards because that's what the hand does
+		//Unlike the FireHand_Attachment, we can't rotate this one, so the *player* is inverted
+		//I know that sounds weird, but that's what we're working with.
+		out_Rotation.Yaw = ((UnrRotToDeg*out_Rotation.Yaw)-180)*DegToUnrRot;
+
+
+		/*weaponPlace.Z= out_Location.Z - 15;
 		weaponPlace.X = out_Location.X + 10;//+ = further away, -  closer
-		weaponPlace.Y = out_Location.Y - 60;
+		weaponPlace.Y = out_Location.Y - 60;*/
 
 		//Pitch, Yaw, Roll;
 		weapRot.Pitch = ((UnrRotToDeg*out_Rotation.Pitch) + 45)*DegToUnrRot;
         //We want it to be facing upwards at around 45 degrees, since it has some height to catch up on
 		//We use degrees for manipulation, so we need to multiply back and forth by these constants.
-		weapRot.Roll = out_Rotation.Roll;
+		/*weapRot.Roll = out_Rotation.Roll;
+
+		mWeapRot = Pawn.Weapon.Rotation;
 
 		weapRot.Yaw = ((UnrRotToDeg*out_Rotation.Yaw)-180)*DegToUnrRot ;//Should invert
 		//We use degrees for manipulation, so we need to multiply back and forth by these constants.
 
-		mWeapRot.Pitch = out_Rotation.Pitch;
-		mWeapRot.Roll = weapRot.Roll;
-		//mWeapRot.Roll = ((UnrRotToDeg*out_Rotation.Roll) + 180)*DegToUnrRot;
-		mWeapRot.Yaw = out_Rotation.Yaw;// We don't want to invert this.		
-		//mWeapRot.Yaw = ((UnrRotToDeg*out_Rotation.Yaw) + 180)*DegToUnrRot;
+		//mWeapRot.Pitch = -out_Rotation.Pitch;
+		//mWeapRot.Roll = weapRot.Roll;
+		//mWeapRot.Yaw = out_Rotation.Yaw;// We don't want to invert this.		
 
 		//makeMatrix(weaponPlace, mWeapRot);//Comments below
 		//So, the newest idea is that we take the rotation of the camera,
@@ -82,19 +105,22 @@ simulated event GetPlayerViewPoint( out vector out_Location, out Rotator out_Rot
 		//We do it after the offset below though.
 		
 		
-		weaponPlace.Z -= out_Location.Z - 10;//TODO: -7
-		weaponPlace.X -= out_Location.X - 8;
-		weaponPlace.Y -= out_Location.Y - 30;//TODO: +30
+		//weaponPlace.Z -= out_Location.Z;
+		//weaponPlace.X -= out_Location.X + 5;
+		//weaponPlace.Y -= out_Location.Y - 30;
 
+
+		//Trying something new - going to see if, from zero, we can force it to use the socket manager
+		weaponPlace = Pawn.Weapon.Location;
+		//Take the location it currently is, and then rotate around the pawn origin as required.
+		//weaponPlace.Z -= out_Location.Z;
+		//weaponPlace.X -= out_Location.X;
+		//weaponPlace.Y -= out_Location.Y;
 		
 		//Rotation matrix application call here
 		makeMatrix(weaponPlace, mWeapRot, out_Location);
 		
-		//makeMatrix(weaponPlace, out_Rotation, out_Location);
-
-		//weaponPlace.Z = -weaponPlace.Z;
-		//We want it inverted here, as up == down for some reason
-		
+		//weaponPlace.Z += out_Location.Z;
 		//weaponPlace.X += out_Location.X;
 		//weaponPlace.Y += out_Location.Y;
 		
@@ -105,6 +131,7 @@ simulated event GetPlayerViewPoint( out vector out_Location, out Rotator out_Rot
 		
 		FireHand(Pawn.Weapon).SetRotation(weapRot);
 		FireHand(Pawn.Weapon).SetLocation(weaponPlace);
+		*/
 		
 
 		//Okay, so we lie at this point.
@@ -139,8 +166,8 @@ function makeMatrix(out Vector out_Location, out Rotator out_Rotation, out Vecto
 	local float tempX;
 	local float tempY;
 	local float tempZ;
-	tempX = 10;//Doesn't make much sense, but it seems to be going over.
-	tempY = -10;
+	tempX = 10;
+	tempY = -60;
 	tempZ = -15;
 	
 	//We get the axis of the actual rotation of the object, 
@@ -148,17 +175,17 @@ function makeMatrix(out Vector out_Location, out Rotator out_Rotation, out Vecto
 	//Some of these may be wrong, I'm not sure yet.
 	GetAxes(out_Rotation, tempVectX, tempVectY, tempVectZ);
 	
-	tempX -= (tempVectX.X*out_Location.X);
-	//tempX -= (tempVectY.X*out_Location.X);
-	//tempX -= (tempVectZ.X*out_Location.X);
+	tempX += (tempVectX.X*out_Location.X);
+	tempX += (tempVectY.X*out_Location.X);
+	tempX += (tempVectZ.X*out_Location.X);
 
-	//tempY -= (tempVectX.Y*out_Location.Y);
+	tempY += (tempVectX.Y*out_Location.Y);
 	tempY += (tempVectY.Y*out_Location.Y);
-	//tempY -= (tempVectZ.Y*out_Location.Y);
+	tempY += (tempVectZ.Y*out_Location.Y);
 	
-	//tempZ -= (tempVectX.Z*out_Location.Z);
-	//tempZ -= (tempVectY.Z*out_Location.Z);
-	tempZ -= (tempVectZ.Z*out_Location.Z);
+	tempZ += (tempVectX.Z*out_Location.Z);
+	tempZ += (tempVectY.Z*out_Location.Z);
+	tempZ += (tempVectZ.Z*out_Location.Z);
 	
 	`log("[SPG_PlayerController.MakeMatrix] Original X, Y, Z");
 	`log(out_Location.X);

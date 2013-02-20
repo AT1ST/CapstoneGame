@@ -60,20 +60,20 @@ defaultproperties
 	ProjExplosionTemplate=ParticleSystem'gizm0san_FireTutorial.Particles.PA_Effect_Fire2'
 	MaxEffectDistance=50.0
 
-	Speed=1500
+	Speed=1350//of bullet
 	MaxSpeed=2000
 	AccelRate=0.0
-	TossZ=200
+	TossZ=200 //arc thrown, low number means faster drop, higher means prolonged drop
 	Physics=PHYS_Falling
 	
 
-	Damage=5
+	Damage=1
 	DamageRadius=0
 	MomentumTransfer=0
 	CheckRadius=26.0
 
 	MyDamageType=class'UTDmgType_LinkPlasma'
-	LifeSpan=5.0// distance of bullet
+	LifeSpan=100.0// how long the bullet lives for
 	NetCullDistanceSquared=+144000000.0
 
 	bCollideWorld=true
