@@ -41,11 +41,13 @@ function Tick(float deltaTime){
 		a.iNeedAWeapon = Spawn(class'CapstoneGame.FireHand');
 		//a.iNeedAWeapon.Mesh.SetLightEnvironment(a.iNeedAWeapon.PickupMesh.LightEnvironment);
 		a.iNeedAWeapon.GiveTo(Self);
-		Controller.SwitchToBestWeapon();//Enforces switchover
+		GetALocalPlayerController().ConsoleCommand("showMainWeapon");
+		//Controller.SwitchToBestWeapon();//Enforces switchover
 		//Since we take no damage...
 		//return false;
 		return;
 	}
+	GetALocalPlayerController().ConsoleCommand("hideMainWeapon");
 	//If we get this far, it means we haven't had any trigger volumes to be near.
 	//Ergo, discard all inventory.
 	InvManager.DiscardInventory();
@@ -55,13 +57,15 @@ function Tick(float deltaTime){
 	local FireTriggerVolume a;
 	ForEach TouchingActors(class'Ruination.FireTriggerVolume',a){
 		//Since we are touching, then we add the weapon
-		a.iNeedAWeapon = Spawn(class'RuinLinkGun');
-		a.iNeedAWeapon.GiveTo(Self);
+		//a.iNeedAWeapon = Spawn(class'RuinLinkGun');
+		//a.iNeedAWeapon.GiveTo(Self);
+		GetALocalPlayerController().ConsoleCommand("showMainWeapon");//Show the weapon - we may want a boolean for this
 		Controller.SwitchToBestWeapon();//Enforces switchover
 		//Since we take no damage...
 		//return false;
 		return;
 	}
+	GetALocalPlayerController().ConsoleCommand("hideMainWeapon");
 	//If we get this far, it means we haven't had any trigger volumes to be near.
 	//Ergo, discard all inventory.
 	InvManager.DiscardInventory();
@@ -69,6 +73,16 @@ function Tick(float deltaTime){
 
 
 //Just to load custom assets in (Currently, none, so makes the pawn invisible)
+
+
+
+exec function showMainWeapon(){
+	Mesh.SetSkeletalMesh(defaultMesh);
+}
+
+exec function hideMainWeapon(){
+	Mesh.SetSkeletalMesh(SkeletalMesh'CapstoneWeaponPackage.firehandbaserigB');
+}
 
 
 simulated function SetCharacterClassFromInfo(class<UTFamilyInfo> Info)
@@ -81,6 +95,8 @@ Mesh.AnimSets=defaultAnimSet;
 Mesh.SetAnimTreeTemplate(defaultAnimTree);
 //AttachComponent(particleSystemComponent);
 } 
+
+
 
 
 defaultproperties
@@ -111,8 +127,8 @@ defaultproperties
 	
 	//This code was previously used to replace the pawn in previous projects.
 	//Because the assets don't exist, it effectively makes the pawn invisible.
-	
-   defaultMesh=SkeletalMesh'CapstoneWeaponPackage.firehandbaserig'
+	defaultMesh=SkeletalMesh'CapstoneWeaponPackage.firehandtest2'
+   //defaultMesh=SkeletalMesh'CapstoneWeaponPackage.firehandbaserig'
    //   defaultMesh=SkeletalMesh'KismetGame_Assets.Anims.SK_Turtle'
   //Change this to reflect our character's skeletal mesh
 

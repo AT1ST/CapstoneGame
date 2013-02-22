@@ -76,8 +76,8 @@ simulated event GetPlayerViewPoint( out vector out_Location, out Rotator out_Rot
 		//Should be facing "backwards", which is forwards because that's what the hand does
 		//Unlike the FireHand_Attachment, we can't rotate this one, so the *player* is inverted
 		//I know that sounds weird, but that's what we're working with.
-		out_Rotation.Yaw = ((UnrRotToDeg*out_Rotation.Yaw)-180)*DegToUnrRot;
-
+		out_Rotation.Yaw = ((UnrRotToDeg*out_Rotation.Yaw))*DegToUnrRot;
+		
 
 		/*weaponPlace.Z= out_Location.Z - 15;
 		weaponPlace.X = out_Location.X + 10;//+ = further away, -  closer
@@ -91,7 +91,7 @@ simulated event GetPlayerViewPoint( out vector out_Location, out Rotator out_Rot
 
 		mWeapRot = Pawn.Weapon.Rotation;
 
-		weapRot.Yaw = ((UnrRotToDeg*out_Rotation.Yaw)-180)*DegToUnrRot ;//Should invert
+		//weapRot.Yaw = ((UnrRotToDeg*out_Rotation.Yaw)-180)*DegToUnrRot ;//Should invert
 		//We use degrees for manipulation, so we need to multiply back and forth by these constants.
 
 		//mWeapRot.Pitch = -out_Rotation.Pitch;
@@ -140,7 +140,7 @@ simulated event GetPlayerViewPoint( out vector out_Location, out Rotator out_Rot
 		//out_Location.Y = weaponPlace.Y - 15;
 		//out_Location.Z = weaponPlace.Z + 15;
 		//out_Rotation
-		
+		//Pawn.setRotation(out_Rotation);
 		//FireHand(Pawn.Weapon).WeaponCalcCamera(0, out_Location, out_Rotation);
 	}
 	else
@@ -157,6 +157,10 @@ simulated event GetPlayerViewPoint( out vector out_Location, out Rotator out_Rot
 			super.GetPlayerViewPoint(out_Location, out_Rotation);
 		}
 	}
+	mWeapRot.Pitch = (360-(UnrRotToDeg*out_Rotation.Pitch))*DegToUnrRot ;
+	mWeapRot.Yaw = ((UnrRotToDeg*out_Rotation.Pitch)-180)*DegToUnrRot ; //Inverts it again - just trust me here that this should make sense
+	mWeapRot.Roll = Pawn.Mesh.Rotation.Roll;
+	Pawn.Mesh.setRotation(mWeapRot);
 }
 
 function makeMatrix(out Vector out_Location, out Rotator out_Rotation, out Vector out_Location_Standard){
@@ -205,6 +209,15 @@ function makeMatrix(out Vector out_Location, out Rotator out_Rotation, out Vecto
 	
 	//tempVect = 
 
+}
+
+
+exec function showWeapon(){
+	ConsoleCommand("showMainWeapon");
+}
+
+exec function hideWeapon(){
+	ConsoleCommand("hideMainWeapon");
 }
 
 

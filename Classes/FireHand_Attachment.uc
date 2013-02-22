@@ -73,8 +73,8 @@ simulated function SetSkin(Material NewMaterial)
 	//	Mesh.SetMaterial(0, WeaponMaterialInstance);
 	//}
 	
-	WeaponMaterialInstance.SetParent(Mesh.GetMaterial(0));
-    Mesh.SetMaterial(0, WeaponMaterialInstance);
+	//WeaponMaterialInstance.SetParent(Mesh.GetMaterial(0));
+    //Mesh.SetMaterial(0, WeaponMaterialInstance);
 }
 
 
@@ -82,27 +82,27 @@ defaultproperties{
 
 	// Weapon SkeletalMesh
 	
-	Begin Object Class=DynamicLightEnvironmentComponent Name=MyLightEnvironment
+	/*Begin Object Class=DynamicLightEnvironmentComponent Name=MyLightEnvironment
 		bSynthesizeSHLight=TRUE
 		bIsCharacterLightEnvironment=TRUE
 		bUseBooleanEnvironmentShadowing=FALSE
 		InvisibleUpdateTime=1
 		MinTimeBetweenFullUpdates=.2
 	End Object
-	Components.Add(MyLightEnvironment)
+	Components.Add(MyLightEnvironment)*/
 
-	BaseMaterialForUse = Material'CapstoneWeaponPackage.Materials.handMaterial'
-	WeaponMaterialInstance = MaterialInstanceConstant'CapstoneWeaponPackage.Materials.handMaterial_INST'
+	//BaseMaterialForUse = Material'CapstoneWeaponPackage.Materials.handMaterial'
+	//WeaponMaterialInstance = MaterialInstanceConstant'CapstoneWeaponPackage.Materials.handMaterial_INST'
 	
-	Begin Object Name=SkeletalMeshComponent0
-		SkeletalMesh=SkeletalMesh'CapstoneWeaponPackage.firehandbaserig'
+	/*Begin Object Name=SkeletalMeshComponent0
+		SkeletalMesh=SkeletalMesh'CapstoneWeaponPackage.firehandbaserigA'
 		Translation=(Z=0, X=40, Y=20)
-		LightEnvironment=MyLightEnvironment
+		//LightEnvironment=MyLightEnvironment
 		//Material=Material'CapstoneWeaponPackage.Materials.blinn1'
 		//Rotation=(Roll=-400)
 		Rotation=(Roll=-90, Pitch=-180, Yaw=0)
 		Scale=0.1
-	End Object
+	End Object*/
 	
 	//Mesh=SkeletalMeshComponent0
 	//Components.Add(SkeletalMeshComponent0)

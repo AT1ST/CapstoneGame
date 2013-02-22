@@ -13,10 +13,10 @@ var Material BaseMaterialForUse;
 simulated function PostBeginPlay()
 {
 	super.PostBeginPlay();
-	if(Mesh != None){
-		Mesh.SetMaterial(1,  MaterialInstanceConstant'CapstoneWeaponPackage.Materials.handMaterial_INST');
-		Mesh.SetMaterial(0,  MaterialInstanceConstant'CapstoneWeaponPackage.Materials.handMaterial_INST');
-	}
+	//if(Mesh != None){
+		//Mesh.SetMaterial(1,  MaterialInstanceConstant'CapstoneWeaponPackage.Materials.handMaterial_INST');
+		//Mesh.SetMaterial(0,  MaterialInstanceConstant'CapstoneWeaponPackage.Materials.handMaterial_INST');
+	//}
     
 
 	//SetSkin(BaseMaterialForUse);
@@ -91,7 +91,7 @@ simulated function SetSkin(Material NewMaterial)
 	//Set this all inside the super call
 	local int i,Cnt;
 
-	if ( NewMaterial == None )
+	/*if ( NewMaterial == None )
 	{
 		`log("[FireHand.SetSkin] No instanced material found");
 		// Clear the materials
@@ -126,13 +126,13 @@ simulated function SetSkin(Material NewMaterial)
 	}
 	
 	Mesh.SetMaterial(1, MaterialInstanced);
-	Mesh.SetMaterial(0, MaterialInstanced);
+	Mesh.SetMaterial(0, MaterialInstanced);*/
 }
 
 simulated function TimeWeaponEquipping()
 {
     super.TimeWeaponEquipping();
-	SkeletalMeshComponent(Mesh).SetLightEnvironment(Instigator.Mesh.LightEnvironment);
+	//SkeletalMeshComponent(Mesh).SetLightEnvironment(Instigator.Mesh.LightEnvironment);
     
 }
 
@@ -151,7 +151,7 @@ defaultproperties
 	WeaponFireSnd(0)=SoundCue'A_Ambient_NonLoops.Fire.Fire_TorchStart_01_Cue'
 	WeaponFireSnd(1)=SoundCue'none'
 
-	Begin Object class=AnimNodeSequence Name=MeshSequenceA
+	/*Begin Object class=AnimNodeSequence Name=MeshSequenceA
 		bCauseActorAnimEnd=true
 	End Object
 	
@@ -162,16 +162,16 @@ defaultproperties
 		InvisibleUpdateTime=1
 		MinTimeBetweenFullUpdates=.2
 	End Object
-	Components.Add(MyLightEnvironment)
+	Components.Add(MyLightEnvironment)*/
 	
 	MaterialInstanced = MaterialInstanceConstant'CapstoneWeaponPackage.Materials.handMaterial_INST'
 	BaseMaterialForUse = Material'CapstoneWeaponPackage.Materials.handMaterial'
 	
-	AttachmentClass=class'CapstoneGame.FireHand_Attachment'
+	//AttachmentClass=class'CapstoneGame.FireHand_Attachment'
 
 	// Weapon SkeletalMesh
 	Begin Object Name=FirstPersonMesh
-		SkeletalMesh=SkeletalMesh'CapstoneWeaponPackage.firehandbaserig'
+		SkeletalMesh=SkeletalMesh'CapstoneWeaponPackage.firehandbaserigA'
 		AnimSets(0)=AnimSet'CapstoneWeaponPackage.pasted__pasted__bones'
 		LightEnvironment=MyLightEnvironment
 		//Material'CapstoneWeaponPackage.Materials.blinn1'
@@ -189,7 +189,7 @@ defaultproperties
 
 	// Pickup staticmesh
 	Begin Object Name=PickupMesh
-		SkeletalMesh=SkeletalMesh'CapstoneWeaponPackage.firehandbaserig'
+		SkeletalMesh=SkeletalMesh'CapstoneWeaponPackage.firehandbaserigA'
 		//Material'CapstoneWeaponPackage.Materials.blinn1'
 		LightEnvironment=MyLightEnvironment
 		Scale=0.1
