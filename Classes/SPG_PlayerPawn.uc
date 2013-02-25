@@ -33,6 +33,67 @@ simulated function StartFire(byte FireModeNum)
 //*********************
 
 
+//For animations, we do it from here.
+//Don't trust the SkeletalMeshComponent to actually play it because AnimTrees...are only from UDK base.
+//So...we make our own!
+//Probably not supposed to do this this way, but if you've been paying attention to the rest of the code comments...
+//...Yeah... :p
+
+/** simple generic case animation player
+ * requires that the one and only animation node in the AnimTree is an AnimNodeSequence
+ * @param AnimName name of the animation to play
+ * @param Duration (optional) override duration for the animation
+ * @param bLoop (optional) whether the animation should loop
+ * @param bRestartIfAlreadyPlaying whether or not to restart the animation if the specified anim is already playing
+ * @param StartTime (optional) What time to start the animation at
+ * @param bPlayBackwards (optional) Play this animation backwards
+ */
+
+//TODO: Look into this.
+/*function PlayAnim(name AnimName, optional float Duration, optional bool bLoop, optional bool bRestartIfAlreadyPlaying = true, optional float StartTime=0.0f, optional bool bPlayBackwards=false)
+{
+	local AnimNodeSequence AnimNode;
+	local float DesiredRate;
+
+	AnimNode = Mesh.AnimNodeSequence(Mesh.Animations);
+	if (AnimNode == None && Mesh.Animations.IsA('AnimTree'))
+	{
+		AnimNode = Mesh.AnimNodeSequence(AnimTree(Mesh.Animations).Children[0].Anim);
+	}
+	if (AnimNode == None)
+	{
+		`warn("Base animation node is not an AnimNodeSequence (Owner:" @ Owner $ ")");
+	}
+	else
+	{
+		if (AnimNode.AnimSeq != None && AnimNode.AnimSeq.SequenceName == AnimName)
+		{
+			DesiredRate = (Duration > 0.0) ? (AnimNode.AnimSeq.SequenceLength / (Duration * AnimNode.AnimSeq.RateScale)) : 1.0;
+			DesiredRate = (bPlayBackwards) ? -DesiredRate : DesiredRate;
+			if (bRestartIfAlreadyPlaying || !AnimNode.bPlaying)
+			{
+				AnimNode.PlayAnim(bLoop, DesiredRate, StartTime);
+			}
+			else
+			{
+				AnimNode.Rate = DesiredRate;
+				AnimNode.bLooping = bLoop;
+			}
+		}
+		else
+		{
+			AnimNode.SetAnim(AnimName);
+			if (AnimNode.AnimSeq != None)
+			{
+				DesiredRate = (Duration > 0.0) ? (AnimNode.AnimSeq.SequenceLength / (Duration * AnimNode.AnimSeq.RateScale)) : 1.0;
+				DesiredRate = (bPlayBackwards) ? -DesiredRate : DesiredRate;
+				AnimNode.PlayAnim(bLoop, DesiredRate, StartTime);
+			}
+		}
+	}
+}*/
+
+
 function Tick(float deltaTime){
 	local FireTriggerVolume a;
 	super.Tick(deltaTime);

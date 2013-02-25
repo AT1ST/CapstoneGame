@@ -26,6 +26,20 @@ function WeaponCalcCamera(float fDeltaTime, out vector out_CamLoc, out rotator o
 
 }
 
+
+//Not only do we refil ammo, we decided to play animations here on the pawn, since it has the FireHand
+function ConsumeAmmo( byte FireModeNum )
+{
+	if ( bAutoCharge && (Role == ROLE_Authority) )
+	{
+		SetTimer(RechargeRate+1.0, false, 'RechargeAmmo');
+	}
+	//Figure out how this works, and we'll have firing animations.
+	//PlayAnim(name AnimName, optional float Duration, optional bool bLoop, optional bool bRestartIfAlreadyPlaying = true, optional float StartTime=0.0f, optional bool bPlayBackwards=false);
+	//super.ConsumeAmmo(FireModeNum);
+}
+
+
 simulated function bool ShouldRefire()
 {
 	EndFire(CurrentFireMode);

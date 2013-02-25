@@ -42,6 +42,7 @@ simulated event GetPlayerViewPoint( out vector out_Location, out Rotator out_Rot
 	local Vector weaponPlace;
 	local Rotator weapRot;
 	local Rotator mWeapRot;//Modified weap rot
+	local vector mWeapLoc;
 
 	// sometimes the PlayerCamera can be none and we probably do not want this
 	// so we will check to see if we have a CameraClass.  Having a CameraClass is
@@ -161,6 +162,13 @@ simulated event GetPlayerViewPoint( out vector out_Location, out Rotator out_Rot
 	mWeapRot.Yaw = ((UnrRotToDeg*out_Rotation.Pitch)-180)*DegToUnrRot ; //Inverts it again - just trust me here that this should make sense
 	mWeapRot.Roll = Pawn.Mesh.Rotation.Roll;
 	Pawn.Mesh.setRotation(mWeapRot);
+
+	//Now for one last change - see if we can't offset it properly.
+	//NOTE: Doesn't work - Mesh doesn't have SetLocation as a function.
+	//mWeapLoc.X = -10;
+	//mWeapLoc.Y = -30;
+	//mWeapLoc.Z = 0;
+	//Pawn.Mesh.SetLocation(mWeapLoc);
 }
 
 function makeMatrix(out Vector out_Location, out Rotator out_Rotation, out Vector out_Location_Standard){

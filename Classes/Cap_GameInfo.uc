@@ -32,6 +32,22 @@ function Tick(float deltaTime){
 }
 
 
+function Tick(float deltaTime){
+	WorldInfo.Tick(deltaTime);//Pretend regular tick happens
+	//Reset time
+	//reset timelimit
+	GameReplicationInfo.RemainingTime = 60 * TimeLimit;
+	// if the round lasted less than one minute, we won't be actually changing RemainingMinute
+	// which will prevent it from being replicated, so in that case
+	// reduce the time limit by one second to ensure that it is unique
+	if ( GameReplicationInfo.RemainingTime == GameReplicationInfo.RemainingMinute )
+	{
+		GameReplicationInfo.RemainingTime--;
+	}
+	GameReplicationInfo.RemainingMinute = GameReplicationInfo.RemainingTime;
+}
+
+
 /*function NavigationPoint FindPlayerStart( Controller Player, optional byte InTeam, optional string IncomingName )
 {
 	local NavigationPoint N, BestStart;
