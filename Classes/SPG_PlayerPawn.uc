@@ -19,6 +19,29 @@ var AnimNodeSequence defaultAnimSeq;
 var PhysicsAsset defaultPhysicsAsset;
 
 
+var SkelControlBase ASkelControl;
+
+
+simulated event PostInitAnimTree(SkeletalMeshComponent SkelComp)
+{
+  Super.PostInitAnimTree(SkelComp);
+
+  if (SkelComp == Mesh)
+  {
+    ASkelControl = Mesh.FindSkelControl('LocationOffset');
+  }
+}
+
+//Just to make sure things are removed when they are.
+simulated event Destroyed()
+{
+  Super.Destroyed();
+
+  ASkelControl = None;
+}
+
+
+
 // code for removal of double click delay************************************************
 simulated function StartFire(byte FireModeNum)
 {
@@ -192,8 +215,9 @@ defaultproperties
    //defaultMesh=SkeletalMesh'CapstoneWeaponPackage.firehandbaserig'
    //   defaultMesh=SkeletalMesh'KismetGame_Assets.Anims.SK_Turtle'
   //Change this to reflect our character's skeletal mesh
-
-   defaultAnimTree=AnimTree'CH_AnimHuman_Tree.AT_CH_Human'
+   //SkeletonControl = LocationOffset
+   //defaultAnimTree=AnimTree'CH_AnimHuman_Tree.AT_CH_Human'
+   defaultAnimTree=AnimTree'CapstoneWeaponPackage.FireHand_Tree'
    //  defaultAnimTree=AnimTree'KismetGame_Assets.Anims.Turtle_AnimTree'
 
    defaultAnimSet[0]=AnimSet'CapstoneWeaponPackage.pasted__pasted__bones'
