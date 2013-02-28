@@ -18,6 +18,30 @@ var array<AnimSet> defaultAnimSet;
 var AnimNodeSequence defaultAnimSeq;
 var PhysicsAsset defaultPhysicsAsset;
 
+var() ParticleSystemComponent psg;
+
+var SkelControlBase ASkelControl;
+
+
+simulated event PostInitAnimTree(SkeletalMeshComponent SkelComp)
+{
+  Super.PostInitAnimTree(SkelComp);
+
+  if (SkelComp == Mesh)
+  {
+    ASkelControl = Mesh.FindSkelControl('LocationOffset');
+  }
+}
+
+//Just to make sure things are removed when they are.
+simulated event Destroyed()
+{
+  Super.Destroyed();
+
+  ASkelControl = None;
+}
+
+
 
 var SkelControlBase ASkelControl;
 
@@ -162,10 +186,14 @@ function Tick(float deltaTime){
 
 exec function showMainWeapon(){
 	Mesh.SetSkeletalMesh(defaultMesh);
+	//psg.SetTemplate(particleSystemComponent);
+	psg.setActive(true);
 }
 
 exec function hideMainWeapon(){
 	Mesh.SetSkeletalMesh(SkeletalMesh'CapstoneWeaponPackage.firehandbaserigB');
+	//psg.SetTemplate(PaticleSystem'P');
+	psg.setActive(false);
 }
 
 
@@ -177,6 +205,10 @@ Mesh.SetPhysicsAsset(defaultPhysicsAsset);
 Mesh.SetLightEnvironment(LightEnvironment);//Force the light to stick to it?
 Mesh.AnimSets=defaultAnimSet;
 Mesh.SetAnimTreeTemplate(defaultAnimTree);
+//By default, don't show the right thing
+//psg.SetTemplate(PaticleSystem'P');
+//Though we do show the particle
+psg.SetLightEnvironment(LightEnvironment);
 //AttachComponent(particleSystemComponent);
 } 
 
@@ -209,6 +241,16 @@ defaultproperties
 	End Object
 	Components.Add(LightEnvironment)
 	
+	particleSystemComponent=ParticleSystem'FirePackage.Particles.PS_Fire_Small'
+	
+	
+	psg =CapstoneGame.PlayerEmitter
+	
+	/*Begin Object Class=ParticleSystemComponent Name=psg
+		Template=particleSystemComponent
+		LightEnvironment=LightEnvironment
+	EndObject*/
+	
 	//This code was previously used to replace the pawn in previous projects.
 	//Because the assets don't exist, it effectively makes the pawn invisible.
 	defaultMesh=SkeletalMesh'CapstoneWeaponPackage.firehandtest2'
@@ -225,7 +267,7 @@ defaultproperties
    //defaultAnimSet[0]=AnimSet'KismetGame_Assets.Anims.SK_Turtle_Anims'
 
     defaultPhysicsAsset=PhysicsAsset'CH_AnimHuman.Mesh.SK_CH_AnimHuman_Physics'
-
+	
 	JumpZ+600.0
 	MaxMultiJump=0
 	
